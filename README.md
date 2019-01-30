@@ -7,3 +7,8 @@ Takes an input string and scans through it. At each index, looks through the inp
 Looks sort of like this:
 
 ![example green eggs and ham excerpt](img.jpg)
+
+# Possible todos:
+
+- Allow specifying a minimum match length
+- Skip space characters when considering matches

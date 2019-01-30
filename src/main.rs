@@ -1,33 +1,18 @@
 fn main() {
   let mut e = Encoder::new(
-    "
-GREEN EGGS AND HAM (by Doctor Seuss) 
+    "Once upon a midnight dreary, while I pondered, weak and weary,
+Over many a quaint and curious volume of forgotten lore
+    While I nodded, nearly napping, suddenly there came a tapping,
+As of some one gently rapping, rapping at my chamber door.
+Tis some visitor, I muttered, tapping at my chamber door
+            Only this and nothing more.
 
-I AM SAM. I AM SAM. SAM I AM.
-
-THAT SAM-I-AM! THAT SAM-I-AM! I DO NOT LIKE THAT SAM-I-AM!
-
-DO WOULD YOU LIKE GREEN EGGS AND HAM?
-
-I DO NOT LIKE THEM,SAM-I-AM.
-I DO NOT LIKE GREEN EGGS AND HAM.
-
-WOULD YOU LIKE THEM HERE OR THERE?
-
-I WOULD NOT LIKE THEM HERE OR THERE.
-I WOULD NOT LIKE THEM ANYWHERE.
-I DO NOT LIKE GREEN EGGS AND HAM.
-I DO NOT LIKE THEM, SAM-I-AM.
-
-WOULD YOU LIKE THEM IN A HOUSE?
-WOULD YOU LIKE THEN WITH A MOUSE?
-
-I DO NOT LIKE THEM IN A HOUSE.
-I DO NOT LIKE THEM WITH A MOUSE.
-I DO NOT LIKE THEM HERE OR THERE.
-I DO NOT LIKE THEM ANYWHERE.
-I DO NOT LIKE GREEN EGGS AND HAM.
-I DO NOT LIKE THEM, SAM-I-AM.
+    Ah, distinctly I remember it was in the bleak December;
+And each separate dying ember wrought its ghost upon the floor.
+    Eagerly I wished the morrow; vainly I had sought to borrow
+    From my books surcease of sorrow sorrow for the lost Lenore
+For the rare and radiant maiden whom the angels name Lenore
+            Nameless here for evermore.
 ",
   );
   e.encode();
