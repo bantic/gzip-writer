@@ -1,19 +1,52 @@
 fn main() {
-  let mut e = Encoder::new("abcab");
+  let mut e = Encoder::new(
+    "
+GREEN EGGS AND HAM (by Doctor Seuss) 
+
+I AM SAM. I AM SAM. SAM I AM.
+
+THAT SAM-I-AM! THAT SAM-I-AM! I DO NOT LIKE THAT SAM-I-AM!
+
+DO WOULD YOU LIKE GREEN EGGS AND HAM?
+
+I DO NOT LIKE THEM,SAM-I-AM.
+I DO NOT LIKE GREEN EGGS AND HAM.
+
+WOULD YOU LIKE THEM HERE OR THERE?
+
+I WOULD NOT LIKE THEM HERE OR THERE.
+I WOULD NOT LIKE THEM ANYWHERE.
+I DO NOT LIKE GREEN EGGS AND HAM.
+I DO NOT LIKE THEM, SAM-I-AM.
+
+WOULD YOU LIKE THEM IN A HOUSE?
+WOULD YOU LIKE THEN WITH A MOUSE?
+
+I DO NOT LIKE THEM IN A HOUSE.
+I DO NOT LIKE THEM WITH A MOUSE.
+I DO NOT LIKE THEM HERE OR THERE.
+I DO NOT LIKE THEM ANYWHERE.
+I DO NOT LIKE GREEN EGGS AND HAM.
+I DO NOT LIKE THEM, SAM-I-AM.
+",
+  );
   e.encode();
-  dbg!(e);
 
-  let s = "abc def abc def";
-  let idx = dbg!(s.find('b')).unwrap();
-  dbg!(idx + s[(idx + 1)..].find('b').unwrap());
+  print_chunks(e.chunks);
+}
 
-  // let mut iter = "abcdef".chars();
-  // while let Some(ch) = iter.next() {
-  //   dbg!(ch);
-  //   iter.next();
-  //   iter.next();
-  //   iter.next();
-  // }
+use colored::*;
+
+pub fn print_chunks(chunks: Vec<Chunk>) {
+  for chunk in chunks {
+    let s = chunk.bytes.into_iter().collect::<String>();
+    if s.len() > 1 {
+      // TODO: Obvious gaps between non-matches
+      print!("{}", s.green().bold());
+    } else {
+      print!("{}", s);
+    }
+  }
 }
 
 #[derive(Debug)]
@@ -48,26 +81,20 @@ impl<'a> Encoder<'a> {
   }
 
   fn scan(&self, c: char, idx: usize) -> Chunk {
-    let mut possible_chunks = vec![];
-
-    dbg!((c, idx));
+    let mut possible_chunks = vec![vec![c]];
 
     for scan_idx in 0..idx {
-      // scan in parallel, from scan_idx and idx, forward to the end of the length of the input
       let mut possible_chunk = vec![];
       let mut scan_chars = self.input[scan_idx..idx].chars();
       let mut chars = self.input[idx..].chars();
 
-      while true {
-        let next_scan_char = scan_chars.next();
-        let next_char = chars.next();
-        dbg!((scan_idx, idx, next_scan_char, next_char));
-        match (next_scan_char, next_char) {
+      loop {
+        match (scan_chars.next(), chars.next()) {
           (Some(x), Some(y)) if x == y => {
             possible_chunk.push(x);
           }
           _ => {
-            if possible_chunk.len() > 1 {
+            if possible_chunk.len() > 0 {
               possible_chunks.push(possible_chunk);
             }
             break;
@@ -76,12 +103,19 @@ impl<'a> Encoder<'a> {
       }
     }
 
-    if possible_chunks.len() > 0 {
-      Chunk {
-        bytes: possible_chunks[0].clone(),
-      }
-    } else {
-      Chunk { bytes: vec![c] }
+    // TODO: Is there a way to do this without all the to-vec-ing?
+    let longest_chunk = possible_chunks
+      .iter()
+      .fold(possible_chunks[0].to_vec(), |acc, item| {
+        if item.len() > acc.len() {
+          item.to_vec()
+        } else {
+          acc
+        }
+      });
+
+    Chunk {
+      bytes: longest_chunk.to_vec(),
     }
   }
 }
